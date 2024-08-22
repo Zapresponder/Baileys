@@ -394,7 +394,7 @@ export const makeMessagesSocket = (config: SocketConfig) => {
 							let groupData = useCachedGroupMetadata && cachedGroupMetadata ? await cachedGroupMetadata(jid) : undefined
 							if(groupData && Array.isArray(groupData?.participants)) {
 								logger.trace({ jid, participants: groupData.participants.length }, 'using cached group metadata')
-							} else {
+							} else if(!isStatus) {
 								groupData = await groupMetadata(jid)
 							}
 
@@ -703,6 +703,8 @@ export const makeMessagesSocket = (config: SocketConfig) => {
 		waUploadToServer,
 		fetchPrivacySettings,
 		sendPeerDataOperationMessage,
+		createParticipantNodes,
+		getUSyncDevices,
 		updateMediaMessage: async(message: proto.IWebMessageInfo) => {
 			const content = assertMediaContent(message.message)
 			const mediaKey = content.mediaKey!
